@@ -1,0 +1,15 @@
+div#logotipo { height: 200px; display: block; }
+
+div#menu { display: block; float: left; height: 300px; width: 300px; }
+
+div#center { height: 450px; display: inline-block; }
+
+#logotipo_picture { float: left; height: 150px; }
+
+#logotipo_name { float: left; }
+
+ul { list-style: none; }
+
+div#account { color: blue; height: 250px; display: inline-block; position: fixed; top: 225px; visibility: hidden; }
+
+div#rules { display: inline-block; float: left; visibility: hidden; height: 250px; position: fixed; top: 225px; }

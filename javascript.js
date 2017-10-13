@@ -38,5 +38,19 @@ function show_play(){
 	document.getElementById('rank').style.visibility = 'hidden';
 }
 
+
+function login(){
+	console.log(document.getElementById('username').value);
+	console.log(document.getElementById('pswd').value);
+}
+
+function input_nrows(){
+	console.log(document.getElementById('tamanho_tabuleiro'));
+}
+
+function input_retirar1(){
+	console.log(document.getElementById('input_retirar1'));
+}
+
 // 
 

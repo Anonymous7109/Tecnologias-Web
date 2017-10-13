@@ -8,34 +8,140 @@
 	<title>NIM Game</title>
 </head>
 <body>
+	
 	<div id="logotipo">
 			<img id="logotipo_picture" src="nim.jpg" alt="logo">
 			<h1 id="logotipo_name"> NIM GAME </h1>
 	</div>
+	
 	<div id="center">
+		
 		<div id="menu">
 			<ul>
-				<li><button class="button_menu" type="button" onclick="show_account()">Account</button></li>
-				<li><button class="button_menu" type="button" onclick="show_config()">Configuration</button></li>
-				<li><button class="button_menu" type="button" onclick="show_rules()">Rules of the Game</button></li>
-				<li><button class="button_menu" type="button" onclick="show_rules()">Rank</button></li>
+				<li><button class="button" type="button" onclick="show_game()">Play</button></li>
+				<li><button class="button" type="button" onclick="show_account()">Account</button></li>
+				<li><button class="button" type="button" onclick="show_config()">Configuration</button></li>
+				<li><button class="button" type="button" onclick="show_rules()">Rules of the Game</button></li>
+				<li><button class="button" type="button" onclick="show_rank()">Rank</button></li>
 			</ul>
 		</div>
+		
 		<div id="play">
+
+			<form>
+				<!--<table id="myTable">
+
+				</table> -->
+			
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td> 
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+				</table>
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+				</table>
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+				</table>
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+				</table> 
+			</form> 
+				<!-- INPUTS retirar -->
+				<div id="retirar">
+					<div class="retirar">
+						<INPUT class="input_retirar" id="input_retirar1" TYPE="TEXT" NAME="retirar1" MAXLENGTH="1">
+						<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar1()">
+					</div>
+					<div class="retirar">
+						<INPUT class="input_retirar" id="input_retirar2" TYPE="TEXT" NAME="retirar1" MAXLENGTH="1">
+						<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar2()">
+					</div>
+					<div class="retirar">
+						<INPUT class="input_retirar" id="input_retirar3" TYPE="TEXT" NAME="retirar1" MAXLENGTH="1">
+						<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar3()">
+					</div>
+					<div class="retirar">
+						<INPUT class="input_retirar" id="input_retirar4" TYPE="TEXT" NAME="retirar1" MAXLENGTH="1">
+						<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar4()">
+					</div>
+				</div>
+				<!-- -->
 		</div>
+
 		<div id="account">
-			<p> ola </p>
-		</div>
+			Username: <INPUT id="username" TYPE="TEXT" NAME="username" MAXLENGTH="15">
+			Password: <INPUT id="pswd" TYPE="PASSWORD" NAME="psw" MAXLENGTH="15">
+			<INPUT class="button" TYPE="button" VALUE = "Login" onclick="login()">
+ 		</div>
+		
 		<div id="config">
+			Tamanho do tabuleiro: <INPUT id="input_nrows()" TYPE="TEXT" NAME="t_tabuleiro" MAXLENGTH="1">
+			<INPUT class="button" TYPE="button" VALUE = "ENTER" onclick="input_nrows()">
 		</div>
+		
 		<div id="rules">
 			<p> O NIM é um jogo matemático... </p>
 		</div>
+		
 		<div id="rank">
 		</div>
+
 	</div>
 </body>
 </html>
-
-<!-- rank tabela de 10 rows / account - formulario  / play - botao   / config - checkbox  / menu - botoes -->
-<!-- make boardgame in javascript / mensagens estados - alert -->

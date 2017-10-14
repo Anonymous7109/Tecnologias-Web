@@ -4,9 +4,9 @@ div#logotipo { height: 250px; display: block; }
 
 div#menu { display: inline-block; float: left; height: 300px; width: 300px; }
 
-div#center { height: 500px; color: white; }
+div#center { height: 500px; color: white; margin-top: 20px; }
 
-#logotipo_picture { float: left; height: 200px; padding-left: 15px; }
+#logotipo_picture { float: left; height: 200px; margin-left: 15px; border: 3px solid black; }
 
 #logotipo_name { float: left; padding-left: 30px; padding-top: 15px; font-size: 70px; font-family: "Courier", monospace; }
 

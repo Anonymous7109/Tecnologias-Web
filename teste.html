@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<link rel="stylesheet" type="text/css" href="mystyle2.css">
+	<script type="text/javascript" src="javascript.js"></script>
+	<title>NIM Game</title>
+</head>
+<body>
+	
+	<div id="head">
+			<!-- <h1 id="name"> NIM GAME </h1>  -->
+			<nav id="mainNav">
+				<ul>
+					<li>
+						<h1 id="name">NIM GAME</h1>
+						<!-- <a href="#page-top">NIM GAME</a> -->
+					</li>
+					<li>
+						<div id="blank"> </div>
+					</li>
+            		<li class="nav_float" >
+              			<a class="nav_float" href="#Play">Play</a>
+            		</li>
+           			 <li class="nav_float" >
+             			<a class="nav_float" href="#Account">Account</a>
+           			 </li>
+            		<li class="nav_float" >
+             			<a class="nav_float" href="#Settings">Settings</a>
+            		</li>
+            		<li class="nav_float" >
+             			<a class="nav_float" href="#Rules">Rules of the Game</a>
+            		</li>
+            		<li class="nav_float" >
+             			<a class="nav_float" href="#Rank">Ranks</a>
+            		</li>
+         		 </ul>
+			</nav>
+	</div>
+	
+	<div id="center">
+		
+		<div id="menu">
+			<ul>
+				<li><button class="button" type="button" onclick="show_game()">Play</button></li>
+				<li><button class="button" type="button" onclick="show_account()">Account</button></li>
+				<li><button class="button" type="button" onclick="show_config()">Configuration</button></li>
+				<li><button class="button" type="button" onclick="show_rules()">Rules of the Game</button></li>
+				<li><button class="button" type="button" onclick="show_rank()">Rank</button></li>
+			</ul>
+		</div>
+		
+		<div id="play">
+			<div id="two_buttons">
+				<button id="button_new_game" type="button" onclick="new_game()">New Game</button>
+				<button id="button_pc_move" type="button" onclick="pc_move()">PC Move</button>
+			<div>
+
+			<form>
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td> 
+						<!-- <td id="placehere1"></td> -->
+					</tr>
+					<!--<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr> -->
+				</table>
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<!--<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr> -->
+				</table>
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<!--<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr> -->
+				</table>
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<!--<tr>
+						<td><img class="circle" src="circle.png" alt=""></td>
+					</tr> -->
+				</table> 
+				<table class="table">
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr>
+					<tr>
+						<td><img class="circle" src="images/circle.png" alt=""></td>
+					</tr> 
+				</table> 
+			</form> 
+
+			<!-- INPUTS retirar -->
+			<div id="retirar">
+				<div class="retirar">
+					<INPUT class="input_retirar" id="input_retirar1" TYPE="TEXT" NAME="retirar1" MAXLENGTH="1">
+					<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar1()">
+				</div>
+				<div class="retirar">
+					<INPUT class="input_retirar" id="input_retirar2" TYPE="TEXT" NAME="retirar2" MAXLENGTH="1">
+					<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar2()">
+				</div>
+				<div class="retirar">
+					<INPUT class="input_retirar" id="input_retirar3" TYPE="TEXT" NAME="retirar3" MAXLENGTH="1">
+					<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar3()">
+				</div>
+				<div class="retirar">
+					<INPUT class="input_retirar" id="input_retirar4" TYPE="TEXT" NAME="retirar4" MAXLENGTH="1">
+					<INPUT class="button" id="button_retirar1" TYPE="button" VALUE = "Retirar" onclick="input_retirar4()">
+				</div>
+				<div class="retirar">
+					<INPUT class="input_retirar" id="input_retirar5" TYPE="TEXT" NAME="retirar5" MAXLENGTH="1">
+					<INPUT class="button" id="button_retirar5" TYPE="button" VALUE = "Retirar" onclick="input_retirar5()">
+				</div>
+			</div>
+			<!-- -->
+		</div> <!-- fecha div id="play"  -->
+
+		<div id="account">
+			Username: <INPUT id="username" TYPE="TEXT" NAME="username" MAXLENGTH="15">
+			Password: <INPUT id="pswd" TYPE="PASSWORD" NAME="psw" MAXLENGTH="15">
+			<INPUT class="button" TYPE="button" VALUE = "Login" onclick="login()">
+ 		</div>
+		
+		<div id="config">
+			Tamanho do tabuleiro: <INPUT id="input_nrows()" TYPE="TEXT" NAME="t_tabuleiro" MAXLENGTH="1">
+			<INPUT class="button" TYPE="button" VALUE = "ENTER" onclick="input_nrows()">
+		</div>
+		
+		<div id="rules">
+			<p> O NIM é um jogo matemático... </p>
+		</div>
+		
+		<div id="rank"> <!-- pontuaçao por tempo -->
+			<!--  picture  -->
+		</div>
+
+	</div> <!-- fecha div id="center"   -->
+</body>
+</html>

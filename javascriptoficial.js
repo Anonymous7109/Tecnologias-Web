@@ -4,6 +4,7 @@ function closeAllDivs(){
 	document.getElementById("rules").style.visibility = "hidden";
 	document.getElementById("game").style.visibility = "hidden";
 	document.getElementById("popupLogin").style.visibility = "hidden";
+	document.getElementById("settings").style.visibility = "hidden";
 }
 
 function changeDivs(clickedItemID){
@@ -68,6 +69,9 @@ function startGame() {
 }
 
 function player_move(){
+
+	/* does only one click / verify if wins / pc_move )
+	/*   tokens[selectedCol][selectedTok].remove.bind(tokens[selectedCol][selectedTok]) 		*/
 
 	/*if(winning_function()) alert("you WON!");
 	else{

@@ -22,7 +22,7 @@
              	<a onclick = changeDivs("rules") href="#">Rules of the Game</a>
             </li>
 			<li>
-             	<a href="#Settings">Settings</a>
+             	<a onclick = changeDivs("settings") href="#">Settings</a>
             </li>
 			<li>
              	<a onclick = changeDivs("popupLogin") href="#">Account</a>
@@ -40,12 +40,37 @@
 		<!-- POPUP DIV -->
 		<div id="popupLogin">
 			<form id="form-login">
-				<button type="button" onclick ="closeAllDivs()">X</button>
+				<button id="close-login" type="button" onclick ="closeAllDivs()">X</button>
 				<h2>Login</h2>
 				<hr> </hr>
 				<input id="username" name="username" placeholder="Username" type="text">
 				<input id="password" name="password" placeholder="Password" type="password">
 				<button class="button" type="button">Login</button>
+			</form>
+		</div>
+
+		<!-- POPUP DIV -->
+		<div id="settings">
+			<form id="settings-form" class="form cf">
+				<button id="close-settings" type="button" onclick ="closeAllDivs()">X</button>
+				<section class="columns cf">
+					<h2 class="settings">Choose the number of columns:</h2>
+					<input type="radio" name="radio1" id="c3" value="c3"><label class="label col" for="c3">3</label>
+					<input type="radio" name="radio1" id="c5" value="c5" checked><label class="label col" for="c5">5</label>
+					<input type="radio" name="radio1" id="c7" value="c7"><label class="label col" for="c7">7</label>
+				</section>
+				<section class="first cf">
+					<h2 class="settings">Select who start the game:</h2>
+					<input type="radio" id="player-first" name="radio2" value="Player" checked><label for="player-first" class="label col">Player</label>
+					<input type="radio" id="pc-first" name="radio2"value="PC"><label for="pc-first" class="label col">PC</label> 
+				</section>
+				<section class="dificulty cf">
+					<h2 class="settings">Select the dificulty:</h2>
+					<input type="radio" name="radio3" id="easy" value="easy"><label class="label col" for="easy">Easy</label>
+					<input type="radio" name="radio3" id="normal" value="normal" checked><label class="label col" for="normal">Normal</label>
+					<input type="radio" name="radio3" id="impossible" value="impossible"><label class="label col" for="impossible">Impossible</label>
+				</section>	
+				<input class="submit" type="submit" value="Submit" onclick = "send_configs()">		
 			</form>
 		</div>
 

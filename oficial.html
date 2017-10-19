@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<link rel="stylesheet" type="text/css" href="mystyleoficial.css">
+	<script type="text/javascript" src="javascriptoficial.js"></script>
+	<title>NIM Game</title>
+</head>
+<body>
+
+	<!-- NAVIGATION -->
+	<nav id="mainNav">
+		<ul>
+			<li>
+				<h1 id="name_page">NIM GAME</h1>
+			</li>
+			 <li>
+             	<a href="#Rank">Ranks</a>
+           	</li>
+			<li>
+             	<a onclick = changeDivs("rules") href="#">Rules of the Game</a>
+            </li>
+			<li>
+             	<a href="#Settings">Settings</a>
+            </li>
+			<li>
+             	<a onclick = changeDivs("popupLogin") href="#">Account</a>
+           	</li>
+            <li>
+              	<a onclick = changeDivs("game") href="#">Play</a>
+            </li>
+        </ul>
+	</nav>
+
+	<!-- MAINSTAGE : GAME ; RULES ; RANK -->
+
+	<div id="mainstage">
+
+		<!-- POPUP DIV -->
+		<div id="popupLogin">
+			<form id="form-login">
+				<button type="button" onclick ="closeAllDivs()">X</button>
+				<h2>Login</h2>
+				<hr> </hr>
+				<input id="username" name="username" placeholder="Username" type="text">
+				<input id="password" name="password" placeholder="Password" type="password">
+				<button class="button" type="button">Login</button>
+			</form>
+		</div>
+
+		<!-- DIV GAME -->
+		<div id = "game">
+		</div> <!-- CLOSE DIV GAME -->
+
+		<!-- DIV RULES -->
+		<div id="rules">
+
+	  		<h3>How to Play</h3>
+	  		<br>This computorized version of the NIM game allows you to play online against other players or offline against the computer.</br>
+	    	<br>The game consists on removing tokens and who removes the last token wins!</br>
+	  		
+	  		<h3>Rules</h3>
+
+          	<ul>
+	    		<li class="rules">Each player has its turn to remove the tokens that we want from the same pile.</li>
+	    		<li class="rules">The player need to take at least one token.</li>
+	    		<li class="rules">The game ends when all the piles are empty and the player who last play made that happen is the winner!</li>
+	  		</ul>
+
+	  	</div> <!-- CLOSE DIV RULES -->
+
+	</div> <!-- CLOSE DIV MAINSTAGE -->
+
+</body>
+</html>

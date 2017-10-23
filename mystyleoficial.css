@@ -45,11 +45,11 @@ div#mainstage {
 
 div#game {
     width: 1000px;
-    height: 700px;
+    height: 800px;
     margin: 0 auto;
     visibility: hidden;
     position: absolute; /* to overlap */
-    top: 20%;
+    top: 25%;
     left: 22%;
 }
 
@@ -120,8 +120,8 @@ button#close-login {
 div.circle_div {
     position: absolute;
     background-size: 100% auto; 
-    /*background-image: url("images/circle.png"); */
-    background-color: black;
+    background-image: url("images/circle.png");
+    /* background-color: black; */
     width: 75px;
     height: 75px;
     border-radius: 100%;
@@ -259,3 +259,5 @@ button#close-settings {
 .submit:hover{
     cursor: pointer;
 }
+
+input#n_columns { border: 2px solid black; height: 25px; display: inline; margin-left: 25px; }

@@ -16,7 +16,7 @@
 				<h1 id="name_page">NIM GAME</h1>
 			</li>
 			 <li>
-             	<a href="#Rank">Ranks</a>
+             	<a onclick = changeDivs("score") href="#">ScoreBoard</a>
            	</li>
 			<li>
              	<a onclick = changeDivs("rules") href="#">Rules of the Game</a>
@@ -33,7 +33,7 @@
         </ul>
 	</nav>
 
-	<!-- MAINSTAGE : GAME ; RULES ; RANK -->
+	<!-- MAINSTAGE : GAME ; RULES ; SCORE -->
 
 	<div id="mainstage">
 
@@ -117,6 +117,44 @@
 	  		</ul>
 
 	  	</div> <!-- CLOSE DIV RULES -->
+
+	  	<!-- DIV SCORE -->
+	  	<div id="score">
+	  		<h2>Scoreboard</h3>
+
+	  		<select id="Score_GameType">
+	    		<option value="online" selected>Offline</option>
+	   			<option value="offline">Online</option>
+	  		</select>
+
+	  		<select id="Score_GameLevel">
+	    		<option value="easy" selected>Easy</option>
+	    		<option value="normal">Normal</option>
+	    		<option value="impossible">Impossible</option>
+	 		</select>
+
+	 		<button>Filter</button>
+
+	 		<br></br>
+
+	 		<table class="scores">
+	    		<thead>
+	     		    <tr>
+						<td>#</td>
+						<td>Name</td>
+						<td>Points</td>
+						<td>Dificulty</td>
+	      			</tr>
+	    		</thead>
+	    		<!-- <tbody>
+	    			<tr>
+	    				<td>1</td>
+	    				<td>localhost</td>
+	    				<td>3</td>
+	    				<td>easy</td>
+	   			</tbody> -->
+	 		</table>
+	  	</div> <!-- CLOSE DIV SCORE -->
 
 	</div> <!-- CLOSE DIV MAINSTAGE -->
 

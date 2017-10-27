@@ -6,6 +6,7 @@ function closeAllDivs(){
 	document.getElementById("game").style.visibility = "hidden";
 	document.getElementById("popupLogin").style.visibility = "hidden";
 	document.getElementById("settings").style.visibility = "hidden";
+	document.getElementById("score").style.visibility = "hidden";
 }
 
 function changeDivs(clickedItemID){
@@ -217,12 +218,16 @@ function pc_move(){
 
 			console.log("[" + columnToRemove + "][" + orderToRemove + "]");
 
-			for (j=circles[columnToRemove].length-1 ; j >= orderToRemove ; j--){ // remove
-				clicked[columnToRemove][j] = 1;
-				circles[columnToRemove][j].element.parentNode.
-				removeChild(circles[columnToRemove][j].element);
-				circles[columnToRemove].pop(); 				
-			}
+			setTimeout(function(){
+
+				for (j=circles[columnToRemove].length-1 ; j >= orderToRemove ; j--){ // remove
+					clicked[columnToRemove][j] = 1;
+					circles[columnToRemove][j].element.parentNode.
+					removeChild(circles[columnToRemove][j].element);
+					circles[columnToRemove].pop(); 				
+				}
+
+			}, 1000);
 		}
 		else if(odd_index.length < 2){
 			//n += Math.pow(2, odd_index[0);
@@ -233,12 +238,14 @@ function pc_move(){
 
 			console.log("<2  n_to_remove: " + n_to_remove);
 
-			for(j = circles[bigger_number].length-1 ; j >= n_to_remove ; j--){
+			setTimeout(function(){for(j = circles[bigger_number].length-1 ; j >= n_to_remove ; j--){
 				clicked[bigger_number][j] = 1; // normal dificulty
 				circles[bigger_number][j].element.parentNode.
 				removeChild(circles[bigger_number][j].element);
 				circles[bigger_number].pop();
-			}
+			}}, 1000);
+
+			
 		}
 		else{
 			for(j = 1 ; j < odd_index.length ; j++) n += Math.pow(2, odd_index[j]);
@@ -247,12 +254,12 @@ function pc_move(){
 
 			console.log(">2  n_to_remove: " + n_to_remove);
 
-			for(j = circles[bigger_number].length-1 ; j >= n_to_remove ; j--){
+			setTimeout(function(){for(j = circles[bigger_number].length-1 ; j >= n_to_remove ; j--){
 				clicked[bigger_number][j] = 1; // normal dificulty
 				circles[bigger_number][j].element.parentNode.
 				removeChild(circles[bigger_number][j].element);
 				circles[bigger_number].pop();
-			}
+			}}, 1000);
 		}
 	}
 

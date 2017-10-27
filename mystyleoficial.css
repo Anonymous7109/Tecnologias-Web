@@ -129,12 +129,6 @@ div.circle_div {
 
 
 
-
-
-
-
-
-
 /*  POPUP SETTINGS */
 
 form#settings-form {
@@ -261,3 +255,19 @@ button#close-settings {
 }
 
 input#n_columns { border: 2px solid black; height: 25px; display: inline; margin-left: 25px; }
+
+
+
+/* DIV SCORE  */
+
+div#score {
+    width: 800px;
+    height: 800px;
+    margin: 0 auto;
+    visibility: hidden;
+    position: absolute; /* to overlap */
+    top: 25%;
+    left: 40%;
+}
+
+table.scores thead tr { font-weight: bold; }

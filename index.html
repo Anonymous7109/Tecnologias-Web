@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8"> 
+	<link rel="stylesheet" type="text/css" href="mystyle.css">
+	<script type="text/javascript" src="javascript.js"></script>
+	<title>NIM Game</title>
+</head>
+<body onload="startGame()">
+
+	<!-- NAVIGATION -->
+	<nav id="mainNav">
+		<ul>
+			<li>
+				<h1 id="name_page">NIM GAME</h1>
+			</li>
+			 <li>
+             	<a onclick="changeDivs('score')" href="#">ScoreBoard</a>
+           	</li>
+			<li>
+             	<a onclick="changeDivs('rules')" href="#">Rules of the Game</a>
+            </li>
+			<li>
+             	<a onclick="changeDivs('settings')" href="#">Settings</a>
+            </li>
+			<li>
+             	<a onclick="changeDivs('popupLogin')" href="#">Account</a>
+           	</li>
+            <li>
+              	<a onclick="changeDivs('game')" href="#">Play</a>
+            </li>
+        </ul>
+	</nav>
+
+	<!-- MAINSTAGE : GAME ; RULES ; SCORE -->
+
+	<div id="mainstage">
+
+		<!-- POPUP DIV -->
+		<div id="popupLogin">
+			<form id="form-login">
+				<button id="close-login" type="button" onclick ="closeLogin()">X</button>
+				<h2>Login</h2>
+				<hr />
+				<input class="input-login" id="username" name="username" placeholder="Username" type="text">
+				<input class="input-login" id="password" name="password" placeholder="Password" type="password">
+				<button id="submit_login" type="button" onclick="login()">Login</button>
+			</form>
+		</div>
+
+		<!-- DIV SETTINGS -->
+		<div id="settings">
+			<form id="settings-form" class="form cf">
+				<button id="close-settings" type="button" onclick ="closeAllDivs()">X</button>
+				<section class="columns cf">
+					<h2 class="settings">Choose the number of columns:</h2>
+					<input type="text" id="n_columns">
+				</section>
+				<section class="first cf">
+					<h2 class="settings">Select who start the game:</h2>
+					<input type="radio" name="who_plays" id="player_start" value="0" checked><label for="player_start" class="label col">Player</label>
+					<input type="radio" name="who_plays" id="pc_start" value="1"><label for="pc_start" class="label col">PC</label> 
+				</section>
+				<section class="dificulty cf">
+					<h2 class="settings">Select the dificulty:</h2>
+					<input type="radio" name="dificulty" id="easy" value="0"><label class="label col" for="easy">Easy</label>
+					<input type="radio" name="dificulty" id="normal" value="1" checked><label class="label col" for="normal">Normal</label>
+					<input type="radio" name="dificulty" id="hardest" value="2"><label class="label col" for="hardest">Hardest</label>
+				</section>	
+				<input class="submit" type="submit" value="Submit" onclick = "send_configs()">		
+			</form>
+		</div> <!-- CLOSE DIV SETTINGS -->
+
+		<!-- DIV GAME -->
+		<div id = "game">
+		</div> <!-- CLOSE DIV GAME -->
+
+		<!-- DIV RULES -->
+		<div id="rules">
+
+	  		<h3>How to Play</h3>
+	  		<br />
+	  		<p>This computorized version of the NIM game allows you to play online against other players or offline against the computer.</p>
+	    	<p>The game consists on removing tokens and who removes the last token wins!</p>
+	    	<br />
+	  		
+	  		<h3>Rules</h3>
+
+          	<ul>
+	    		<li class="rules">Each player has its turn to remove the tokens that we want from the same pile.</li>
+	    		<li class="rules">The player need to take at least one token.</li>
+	    		<li class="rules">The game ends when all the piles are empty and the player who last play made that happen is the winner!</li>
+	  		</ul>
+
+	  		<img id="rules_img" src="images/rules.jpg" alt=""> 
+
+	  	</div> <!-- CLOSE DIV RULES -->
+
+	  	<!-- DIV SCORE -->
+	  	<div id="score">
+	  		<h2>Scoreboard</h2>
+
+	  		<select id="Score_GameType">
+	    		<option value="online" selected>Offline</option>
+	   			<option value="offline">Online</option>
+	  		</select>
+
+	  		<select id="Score_GameLevel">
+	    		<option value="easy" selected>Easy</option>
+	    		<option value="normal">Normal</option>
+	    		<option value="hardest">Hardest</option>
+	 		</select>
+
+	 		<button>Filter</button>
+
+	 		<br />
+
+	 		<table class="scores">
+	    		<thead>
+	     		    <tr>
+						<td>#</td>
+						<td>Name</td>
+						<td>Points</td>
+						<td>Dificulty</td>
+	      			</tr>
+	    		</thead>
+	    		<!-- <tbody>
+	    			<tr>
+	    				<td>1</td>
+	    				<td>localhost</td>
+	    				<td>3</td>
+	    				<td>easy</td>
+	   			</tbody> -->
+	 		</table>
+	  	</div> <!-- CLOSE DIV SCORE -->
+
+	</div> <!-- CLOSE DIV MAINSTAGE -->
+
+</body>
+</html>

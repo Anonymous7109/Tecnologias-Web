@@ -21,11 +21,11 @@ function changeDivs(clickedItemID){
 			startGame();
 			document.getElementById('game_board').style.visibility = "visible";
 		}
-		else if(clickedItemID == 'game_board' && gameISover == 1){
+		else if(clickedItemID == 'game' && gameISover == 1){
 			startGame();
 			document.getElementById(clickedItemID).style.visibility = "visible";
 		}
-		else if(clickedItemID == 'game_board') document.getElementById(clickedItemID).style.visibility = "visible";
+		else if(clickedItemID == 'game') document.getElementById(clickedItemID).style.visibility = "visible";
 		else document.getElementById(clickedItemID).style.visibility = "visible";
 }
 
@@ -39,7 +39,8 @@ var numOfColumns = 3; // Number of columns set by the user
 var dificulty = 0;
 var online = false;
 var game_value;
-var LoginObj = {};
+var LoginObj={};
+var update = 0;
 
 var matrix = Array(numOfColumns);
 var array = Array(numOfColumns);
@@ -71,31 +72,6 @@ var Circle = function (pos_x, pos_y, column, order) {		   // Create object
     this.element = document.createElement("div");     	  // HTML element placed in DOM // Oject has a div propriety
     this.column = column;                          			  // Index values that correspond to the column // Object has a column propriety that tells is div
    	this.order = order;                        			 // circles array, ex circles[column][order]	// 
-}
-
-function startGame_online(who_starts_playing){
-	var i, j;
-
-	circles = Array(numOfColumns);
-        for (j=0; j<numOfColumns; j++)
-            circles[j] = Array(j); 
-
-    init_arrays();
-
-    // Populate MainStage with circles
-    for (i=0; i<circles.length; i++) {
-        for (j=0; j<i+1; j++) {
-            circles[i][j] = new Circle(((i * 140)), (720 - (100 + j * 100)), i, j); // first 100 controlos bottom property // second 100 controls left // 140 controls right // 720 controls top property // i * dx and py + j * py will allow the divs with the circles to dont overlap
-            game_board.appendChild(circles[i][j].element); // game is parentNode
-            circles[i][j].element.classList.add("circle_div"); // add className to the divs
-            circles[i][j].element.addEventListener("click", playerremove.bind(circles[i][j])); /* circles[i][j].element.setAtribute("onclick", "remove();"); */
-            // Specify location of each circle
-            circles[i][j].element.style.left = circles[i][j].pos_x + "px";
-            circles[i][j].element.style.top = circles[i][j].pos_y + "px";
-        }
-    }
-
-    playerremove_online(who_starts_playing);
 }
 
 function startGame() {  
@@ -138,13 +114,6 @@ function startGame() {
         }
 
     if(pc_remove) pc_move();
-}
-
-
-function playerremove_online(who_starts_playing){
-	if(who_starts_playing == LoginObj.nick){
-		
-	}
 }
 
 function playerremove(){
@@ -332,146 +301,10 @@ function winning_function(){
     return flag;
 }
 
-function login(){
-	console.log(login);
-	var nick = document.getElementById('username').value;
-	var pass = document.getElementById('password').value;
-	var string = new String("{}");
-
-	if(pass != "" && nick != ""){
-		LoginObj.nick = nick;
-		LoginObj.pass = pass;
-
-		var xhr = new XMLHttpRequest();
-		xhr.open("POST","http://twserver.alunos.dcc.fc.up.pt:8008/register", true);
-		xhr.onreadystatechange = function(){
-			if(xhr.readstate < 4) return;
-			if(xhr.status == 200){
-				var data = JSON.parse(xhr.responseText);
-				if(!(data == string)){
-					alert(data);
-					console.log("login_done")
-					online = true;
-				}
-			}
-			else{
-				alert(xhr.status);
-			}
-		}
-		xhr.send(JSON.stringify(LoginObj));
-	}
-
-	
-
-	/*
-
-	LoginObj = {"nick":"\" + nick + \"", "password":"" + pass + ""}
-
-	//var print = JSON.parse(LoginObj);
-	console.log(LoginObj);
-
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/register", true);
-	xhr.onreadystatechange = function(){
-		console.log("readystate-login");
-		if(xhr.readstate < 4) return;
-		if(xhr.status == 200){
-			var data = JSON.parse(xhr.responseText);
-			if(!(data == string)){
-				alert(data);
-				console.log("login_done")
-				online = true;
-			}
-		}
-		else{
-			alert(xhr.status);
-		}
-	}
-	xhr.send(LoginObj); */
-}
-
 function closeLogin(){
 	closeAllDivs();
     document.getElementById('username').value = "";
     document.getElementById('password').value = "";
-}
-
-function join_match(){
-	//online = true; // DEBUG
-	if(online){
-		JoinObj = { "group": 49, "nick": "" + LoginObj.nick + "", "pass": "" + LoginObj.pass + "", "size": numOfColumns }
-		// DEBUG:
-		//JoinObj = { "group": 49, "nick": "andre", "pass": "123", "size": numOfColumns }
-
-		var xhr = new XMLHttpRequest();
-		xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/join", true);
-		xhr.onreadystatechange = function(){
-			console.log("readystate-join");
-			if(xhr.readstate < 4) return;
-			if(xhr.status == 200){
-				var data = JSON.parse(xhr.responseText);
-				game_value = data.game;
-				console.log("game_value: " + game_value);
-			}
-			else{
-				alert(xhr.status);
-			}
-		}
-		xhr.send(JoinObj);
-
-		update();
-	}
-	else alert("You need to login first")
-}
-
-function leave(){
-	if(online){
-		LeaveObj = { "nick": "" + LoginObj.nick + "", "pass": "" + LoginObj.pass + "", "game": "" + game_value + "" }
-		var string = new String("{}");
-
-		var xhr = new XMLHttpRequest();
-		xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/leave", true);
-		xhr.onreadystatechange = function(){
-			console.log("readysstate-leave");
-			if(xhr.readstate < 4) return;
-			if(xhr.status == 200){
-				var data = JSON.parse(xhr.responseText);
-				if(!(data == string)){
-					alert(data);
-					eventSource.close();
-				}
-			}
-			else{
-				alert(xhr.status);
-			}
-		}
-		xhr.send(LoginObj);
-	}
-	else{}
-}
-
-function notify(){
-}
-
-function update(){
-	// server event // espera que encontra jogo // Se encontrar jogo -> imagem no canvas -> aparece o tabuleiro // e comecam a jogar usando a funçao notify sempre que uma jogado for feita
-	var url = "http://twserver.alunos.dcc.fc.up.pt:8008/update?nick="+LoginObj.nick+"&game="+game_value+"";
-	var string = new String("{}");
-
-	var eventSource = new EventSource("url");
-
-	if(eventSource.readstate == 1) console.log("eventSource OPEN");
-
-	eventSource.onmessage = function(event){
-		var data = JSON.parse(event.data);
-		if(data != string){
-			// CANVAS GAME STARTED
-			var who_starts_playing = data.turn;
-			console.log("who starts playing " + who_starts_playing); 
-			console.log("online game started");
-			startGame_online(who_starts_playing);
-		}
-	}
 }
 
 function send_configs(){
@@ -523,6 +356,15 @@ function isInArray(value, array) {
   return array.indexOf(value) > -1;
 }
 
+
+
+/* 	
+-------------------------
+|	2º DELIVER  		|					
+-------------------------
+*/
+
+
 function ScoreBoard(){
 	score_flag = 1;
 
@@ -570,4 +412,204 @@ function ScoreBoard(){
 			}
 			xhr.send(rankObj);
     	}
+}
+
+function notify(column, order){
+	var NotifyObj = {}
+	var string = new String("{}");
+
+	NotifyObj.nick = LoginObj.nick;
+	NotifyObj.pass = LoginObj.pass;
+	NotifyObj.game = game_value;
+	NotifyObjstack = column;
+	NotifyObj.pieces = order;
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/notify", true);
+	xhr.onreadystatechange = function(){
+		if(xhr.readystate < 4) return;
+		if(xhr.status == 200){
+			var data = JSON.parse(xhr.responseText);
+			console.log("notify response: " + data);
+			if(data == string) return true;
+			else return false; 
+		}
+		else console.log("notify status: " + xhr.status);
+	}
+	xhr.send(NotifyObj);
+}
+
+function leave(){
+	if(online){
+		LeaveObj = { "nick": "" + LoginObj.nick + "", "pass": "" + LoginObj.pass + "", "game": "" + game_value + "" }
+		var string = new String("{}");
+
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/leave", true);
+		xhr.onreadystatechange = function(){
+			console.log("readysstate-leave");
+			if(xhr.readstate < 4) return;
+			if(xhr.status == 200){
+				var data = JSON.parse(xhr.responseText);
+				if(!(data == string)){
+					// canvas leaving
+					alert(data);
+					eventSource.close();
+					closeAllDivs();
+				}
+			}
+			else{
+				alert(xhr.status);
+			}
+		}
+		xhr.send(LoginObj);
+	}
+	else{} // OFFLINE GAME
+}
+
+function join_match(){
+	var flag = true;
+	if(online){
+		//console.log("online");
+		var JoinObj = {};
+		//JoinObj = { "group": 49, "nick": "" + LoginObj.nick + "", "pass": "" + LoginObj.pass + "", "size": numOfColumns }
+
+		JoinObj.group = 49;
+		JoinObj.nick = LoginObj.nick;
+		JoinObj.pass = LoginObj.pass;
+		JoinObj.size = numOfColumns;
+
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/join", true);
+		xhr.onreadystatechange = function(){
+			if(xhr.readystate < 4) return;
+			if(xhr.status == 200){
+					var data = JSON.parse(xhr.responseText);
+					game_value = data.game;
+					console.log("join done");
+					console.log("game_value1: " + game_value);
+					update();
+			}
+			else{
+				alert(xhr.status);
+			}
+		}
+		xhr.send(JSON.stringify(JoinObj));
+	}
+	else alert("you need to be online first");
+
+}
+
+function login(){
+	var nick = document.getElementById('username').value;
+	var pass = document.getElementById('password').value;
+	var string = new String("{}");
+
+	console.log(nick);
+	console.log(pass);
+
+	//LoginObj = {"nick": "" + nick + "" , "pass": "" + pass + ""}
+	LoginObj.nick = nick;
+	LoginObj.pass = pass;
+
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/register", true);
+	xhr.onreadystatechange = function(){
+		if(xhr.readystate < 4) return;
+		if(xhr.status == 200){
+			var data = JSON.parse(xhr.responseText);
+			alert(data);
+			if(!(data == string)){
+				console.log("Login Done"); // teste123 123
+				online = true;
+			}
+		}
+		else{
+			alert(xhr.status);
+		}
+	}
+	xhr.send(JSON.stringify(LoginObj));
+}
+
+function update(){
+	// server event // espera que encontra jogo // Se encontrar jogo -> imagem no canvas -> aparece o tabuleiro // e comecam a jogar usando a funçao notify sempre que uma jogado for feita
+	var url = "http://twserver.alunos.dcc.fc.up.pt:8008/update?nick="+LoginObj.nick+"&game="+game_value+"";
+	var string = new String("{}");
+
+	var eventSource = new EventSource("url");
+
+	if(eventSource.readstate == 1) console.log("eventSource OPEN");
+
+	eventSource.onmessage = function(event){
+		var data = JSON.parse(event.data);
+		if(data == string){
+			// canvas waiting for players
+		}
+		if(data != string){
+			// CANVAS GAME STARTED
+			if(update == 0){
+				console.log("game: " + game_value);
+				var who_starts_playing = data.turn;
+				console.log("who starts playing " + who_starts_playing); 
+				console.log("online game started");
+				update = 1;
+				startGame_online(who_starts_playing);
+			}
+			else{
+				console.log("updating game");
+				// canvas opponent played in data.stack and removed data.pieces
+				for(var j=data.stack ; j >= data.pieces ; j--){
+					circles[data.stack][j].element.parentNode.
+					removeChild(circles[data.stack][j].element);
+					circles[data.stack].pop();
+				}
+			}
+		}
+	}
+}
+
+function playerremove_online(who_starts_playing){
+	if(who_starts_playing == LoginObj.nick){
+		// Canvas your turn
+
+		if(notify(this.column, this.order)){
+			for(var j=circles[this.column].length-1 ; j >= this.order ; j--){
+				circles[this.column][j].element.parentNode.
+				removeChild(circles[this.column][j].element);
+				circles[this.column].pop();
+			}
+		}
+
+		if(winning_function()){
+			// LoginObj.nick won
+			// score update
+		}
+	}
+	// else canvas not your turn
+}
+
+function startGame_online(who_starts_playing){
+	var i, j;
+
+	circles = Array(numOfColumns);
+        for (j=0; j<numOfColumns; j++)
+            circles[j] = Array(j); 
+
+    init_arrays();
+
+    // Populate MainStage with circles
+    for (i=0; i<circles.length; i++) {
+        for (j=0; j<i+1; j++) {
+            circles[i][j] = new Circle(((i * 140)), (720 - (100 + j * 100)), i, j); // first 100 controlos bottom property // second 100 controls left // 140 controls right // 720 controls top property // i * dx and py + j * py will allow the divs with the circles to dont overlap
+            game_board.appendChild(circles[i][j].element); // game is parentNode
+            circles[i][j].element.classList.add("circle_div"); // add className to the divs
+            circles[i][j].element.addEventListener("click", playerremove_online.bind(circles[i][j])); /* circles[i][j].element.setAtribute("onclick", "remove();"); */
+            // Specify location of each circle
+            circles[i][j].element.style.left = circles[i][j].pos_x + "px";
+            circles[i][j].element.style.top = circles[i][j].pos_y + "px";
+        }
+    }
+
+    playerremove_online(who_starts_playing);
 }

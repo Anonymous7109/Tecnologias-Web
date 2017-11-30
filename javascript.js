@@ -413,7 +413,7 @@ function ScoreBoard(){
 			xhr.send(rankObj);
     	}
 }
-
+/*
 function notify(column, order){
 	var NotifyObj = {}
 	var string = new String("{}");
@@ -466,13 +466,11 @@ function leave(){
 	}
 	else{} // OFFLINE GAME
 }
-
+*/
 function join_match(){
 	var flag = true;
 	if(online){
-		//console.log("online");
 		var JoinObj = {};
-		//JoinObj = { "group": 49, "nick": "" + LoginObj.nick + "", "pass": "" + LoginObj.pass + "", "size": numOfColumns }
 
 		JoinObj.group = 49;
 		JoinObj.nick = LoginObj.nick;
@@ -519,7 +517,7 @@ function login(){
 		if(xhr.readystate < 4) return;
 		if(xhr.status == 200){
 			var data = JSON.parse(xhr.responseText);
-			alert(data);
+			//alert(data);
 			if(!(data == string)){
 				console.log("Login Done"); // teste123 123
 				online = true;
@@ -533,40 +531,24 @@ function login(){
 }
 
 function update(){
-	// server event // espera que encontra jogo // Se encontrar jogo -> imagem no canvas -> aparece o tabuleiro // e comecam a jogar usando a funçao notify sempre que uma jogado for feita
-	var url = "http://twserver.alunos.dcc.fc.up.pt:8008/update?nick="+LoginObj.nick+"&game="+game_value+"";
-	var string = new String("{}");
 
-	var eventSource = new EventSource("url");
+	var eventSource = new EventSource("http://twserver.alunos.dcc.fc.up.pt:8008/update?nick="+LoginObj.nick+"&game="+game_value);
 
-	if(eventSource.readstate == 1) console.log("eventSource OPEN");
+	eventSource.addEventListener('message',function(e){
+		var data = JSON.parse(e.data);
+		console.log("online game started");
+		console.log("turn " + data.turn);
+		startGame_online(data.turn);
+	}, false);
+			/* CANVAS
+			var tela = document.getElementById('game_started');
+			var gc = tela.getContext("2d");
 
-	eventSource.onmessage = function(event){
-		var data = JSON.parse(event.data);
-		if(data == string){
-			// canvas waiting for players
-		}
-		if(data != string){
-			// CANVAS GAME STARTED
-			if(update == 0){
-				console.log("game: " + game_value);
-				var who_starts_playing = data.turn;
-				console.log("who starts playing " + who_starts_playing); 
-				console.log("online game started");
-				update = 1;
-				startGame_online(who_starts_playing);
-			}
-			else{
-				console.log("updating game");
-				// canvas opponent played in data.stack and removed data.pieces
-				for(var j=data.stack ; j >= data.pieces ; j--){
-					circles[data.stack][j].element.parentNode.
-					removeChild(circles[data.stack][j].element);
-					circles[data.stack].pop();
-				}
-			}
-		}
-	}
+			gc.fillStyle = "purple";
+			gc.font = '32px serif';
+			gc.fillText("GAME IS ABOUT TO START!", 100,100);
+
+			*/
 }
 
 function playerremove_online(who_starts_playing){

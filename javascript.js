@@ -21,11 +21,11 @@ function changeDivs(clickedItemID){
 			startGame();
 			document.getElementById('game_board').style.visibility = "visible";
 		}
-		else if(clickedItemID == 'game' && gameISover == 1){
+		else if(clickedItemID == 'game_board' && gameISover == 1){
 			startGame();
 			document.getElementById(clickedItemID).style.visibility = "visible";
 		}
-		else if(clickedItemID == 'game') document.getElementById(clickedItemID).style.visibility = "visible";
+		else if(clickedItemID == 'game_board') document.getElementById(clickedItemID).style.visibility = "visible";
 		else document.getElementById(clickedItemID).style.visibility = "visible";
 }
 
@@ -40,7 +40,9 @@ var dificulty = 0;
 var online = false;
 var game_value;
 var LoginObj={};
+var JoinObj = {};
 var update = 0;
+var gameINcourse = false;
 
 var matrix = Array(numOfColumns);
 var array = Array(numOfColumns);
@@ -413,32 +415,8 @@ function ScoreBoard(){
 			xhr.send(rankObj);
     	}
 }
+
 /*
-function notify(column, order){
-	var NotifyObj = {}
-	var string = new String("{}");
-
-	NotifyObj.nick = LoginObj.nick;
-	NotifyObj.pass = LoginObj.pass;
-	NotifyObj.game = game_value;
-	NotifyObjstack = column;
-	NotifyObj.pieces = order;
-
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/notify", true);
-	xhr.onreadystatechange = function(){
-		if(xhr.readystate < 4) return;
-		if(xhr.status == 200){
-			var data = JSON.parse(xhr.responseText);
-			console.log("notify response: " + data);
-			if(data == string) return true;
-			else return false; 
-		}
-		else console.log("notify status: " + xhr.status);
-	}
-	xhr.send(NotifyObj);
-}
-
 function leave(){
 	if(online){
 		LeaveObj = { "nick": "" + LoginObj.nick + "", "pass": "" + LoginObj.pass + "", "game": "" + game_value + "" }
@@ -469,32 +447,46 @@ function leave(){
 */
 function join_match(){
 	var flag = true;
-	if(online){
-		var JoinObj = {};
+	if(!gameINcourse){
+		if(online){
 
-		JoinObj.group = 49;
-		JoinObj.nick = LoginObj.nick;
-		JoinObj.pass = LoginObj.pass;
-		JoinObj.size = numOfColumns;
 
-		var xhr = new XMLHttpRequest();
-		xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/join", true);
-		xhr.onreadystatechange = function(){
-			if(xhr.readystate < 4) return;
-			if(xhr.status == 200){
-					var data = JSON.parse(xhr.responseText);
-					game_value = data.game;
-					console.log("join done");
-					console.log("game_value1: " + game_value);
-					update();
+			//caso o user deixe algum jogo offline em aberto
+			for(var i=0 ; i < numOfColumns ; i++){
+				for (var j = 0 ; j < i+1 ; j++) {
+					if(!(circles[i][j] == null)){  
+						circles[i][j].element.parentNode.        
+						removeChild(circles[i][j].element); 	
+						circles[j].pop();
+					} 						
+				}
 			}
-			else{
-				alert(xhr.status);
+
+			JoinObj.group = 49;
+			JoinObj.nick = LoginObj.nick;
+			JoinObj.pass = LoginObj.pass;
+			JoinObj.size = numOfColumns;
+
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/join", true);
+			xhr.onreadystatechange = function(){
+				if(xhr.readystate < 4) return;
+				if(xhr.status == 200){
+						var data = JSON.parse(xhr.responseText);
+						game_value = data.game;
+						console.log("join done");
+						console.log("game_value: " + game_value);
+						updateee();
+				}
+				//else{
+				//	alert(xhr.status);
+				//}
 			}
+			xhr.send(JSON.stringify(JoinObj));
 		}
-		xhr.send(JSON.stringify(JoinObj));
+		else alert("you need to be online first");
 	}
-	else alert("you need to be online first");
+	else alert("you are already in a game");
 
 }
 
@@ -523,21 +515,22 @@ function login(){
 				online = true;
 			}
 		}
-		else{
-			alert(xhr.status);
-		}
+		//else{
+		//	alert(xhr.status);
+		//}
 	}
 	xhr.send(JSON.stringify(LoginObj));
 }
 
-function update(){
-
+function updateee(){
+	//console.log(game_value);
 	var eventSource = new EventSource("http://twserver.alunos.dcc.fc.up.pt:8008/update?nick="+LoginObj.nick+"&game="+game_value);
 
 	eventSource.addEventListener('message',function(e){
 		var data = JSON.parse(e.data);
 		console.log("online game started");
 		console.log("turn " + data.turn);
+		gameINcourse = true;
 		startGame_online(data.turn);
 	}, false);
 			/* CANVAS
@@ -551,34 +544,68 @@ function update(){
 			*/
 }
 
+/*
+function notify(column, order){
+	var NotifyObj = {}
+	var string = new String("{}");
+
+	NotifyObj.nick = LoginObj.nick;
+	NotifyObj.pass = LoginObj.pass;
+	NotifyObj.game = game_value;
+	NotifyObjstack = column;
+	NotifyObj.pieces = order;
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/notify", true);
+	xhr.onreadystatechange = function(){
+		if(xhr.readystate < 4) return;
+		if(xhr.status == 200){
+			var data = JSON.parse(xhr.responseText);
+			console.log("notify response: " + data);
+			if(data == string) return true;
+			else return false; 
+		}
+		else console.log("notify status: " + xhr.status);
+	}
+	xhr.send(NotifyObj);
+}
+
+
+*/
+
+
+
 function playerremove_online(who_starts_playing){
 	if(who_starts_playing == LoginObj.nick){
 		// Canvas your turn
 
-		if(notify(this.column, this.order)){
+		//if(notify(this.column, this.order)){
 			for(var j=circles[this.column].length-1 ; j >= this.order ; j--){
 				circles[this.column][j].element.parentNode.
 				removeChild(circles[this.column][j].element);
 				circles[this.column].pop();
 			}
-		}
+		//}
 
 		if(winning_function()){
 			// LoginObj.nick won
 			// score update
 		}
 	}
-	// else canvas not your turn
+	else alert("Not your turn to play");
 }
 
 function startGame_online(who_starts_playing){
 	var i, j;
 
-	circles = Array(numOfColumns);
-        for (j=0; j<numOfColumns; j++)
+	init_arrays();
+
+	circles = Array(JoinObj.size);
+        for (j=0; j<JoinObj.size; j++)
             circles[j] = Array(j); 
 
-    init_arrays();
+
+    console.log("populate");
 
     // Populate MainStage with circles
     for (i=0; i<circles.length; i++) {
@@ -592,6 +619,8 @@ function startGame_online(who_starts_playing){
             circles[i][j].element.style.top = circles[i][j].pos_y + "px";
         }
     }
+
+    changeDivs("game_board");
 
     playerremove_online(who_starts_playing);
 }

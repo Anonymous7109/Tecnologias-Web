@@ -43,7 +43,7 @@ div#mainstage {
     overflow: hidden;
 }
 
-div#game {
+div#game_board {
     width: 1000px;
     height: 800px;
     margin: 0 auto;
@@ -310,3 +310,32 @@ div#score {
 }
 
 table.scores thead tr { font-weight: bold; }
+
+table.scores thead tr td { width: 1%; }
+
+
+button#play_online{
+    text-decoration:none;
+    width:10%;
+    text-align:center;
+    display:block;
+    background-color: #333;
+    color: white;
+    padding:10px 0;
+    font-size:20px;
+    cursor:pointer;
+    border-radius:5px; 
+}
+
+button#give_up{
+    text-decoration:none;
+    width:10%;
+    text-align:center;
+    display:block;
+    background-color: #333;
+    color: white;
+    padding:10px 0;
+    font-size:20px;
+    cursor:pointer;
+    border-radius:5px; 
+}

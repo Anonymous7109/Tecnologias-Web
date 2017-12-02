@@ -373,50 +373,77 @@ function isInArray(value, array) {
 function ScoreBoard(){
 	score_flag = 1;
 
-		/*if(document.getElementById('offline').selected){
-			if(document.getElementById('easy_option').selected) var text = document.createTextNode("#1" + " localhost " + score[0] + " easy");
-			else if(document.getElementById('normal_option').selected) var text = document.createTextNode("#1" + " localhost " + score[1] + " normal");
-			else if(document.getElementById('hardest_option').selected) var text = document.createTextNode("#1" + " localhost " + score[2] + " hardest");
-			score_node[0] = document.createElement("div");
-			score_node[0].appendChild(text);
-			document.getElementById("body_scores").appendChild(score_node[0]);
-			//score_node.style.width = "200px";
-			//score_node.style.display = "inline";
-    	}
- else */if(document.getElementById('online').selected){
- 			var o = document.getElementById("Score_GameLevel");
-			var size_value = o.options[o.selectedIndex].value;
-    		console.log(size_value);
-    		rankObj = { "size": "" + size_value + "" }
-			var string = new String("{}");
+	if(document.getElementById('offline').selected){
 
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/ranking", true);
-			xhr.onreadystatechange = function(){
-				console.log("readysstate-leave");
-				if(xhr.readstate < 4) return;
-				if(xhr.status == 200){
-					var data = JSON.parse(xhr.responseText);
-					if(data == string){
-						alert("Ainda sem tabela classificativa");
-					}
-					else{
-						for(var i = 0 ; i < data.length ; i++){
-							var cont = 0;
-							var text = document.createTextNode("#" + cont + " " + data.ranking[i].nick + " " + data.ranking[i].victories + " " + data.ranking[i].games);
-							score_node[0] = document.createElement("div");
-							score_node[0].appendChild(text);
-							document.getElementById("body_scores").appendChild(score_node[0]);
-							cont++;
+		for(var j = 1 ; j <= 10 ; j++){
+	 		console.log("delete");
+	 		if(document.getElementById("td"+j) != null){
+				var element = document.getElementById("td"+j);
+				element.parentNode.removeChild(element);
+			}
+		}
+
+		var of = document.getElementById("Score_GameLevel");
+		var size_value = of.options[of.selectedIndex].value;
+
+		var text = document.createTextNode("localhost " + score[0] + " easy");
+		var text2 = document.createTextNode(" localhost " + score[1] + " normal");
+		var text3 = document.createTextNode(" localhost " + score[2] + " hardest");
+		score_node[0] = document.createElement("div");
+		score_node[0].appendChild(text);
+		score_node[0].appendChild(text2);
+		score_node[0].appendChild(text3);
+		document.getElementById("body_scores").appendChild(score_node[0]);
+    }
+ 	else{ 
+	 	for(var j = 1 ; j <= 10 ; j++){
+	 		console.log("delete");
+	 		if(document.getElementById("td"+j) != null){
+				var element = document.getElementById("td"+j);
+				element.parentNode.removeChild(element);
+			}
+		}
+	 	//if(document.getElementById('online').selected){
+	 			var o = document.getElementById("Score_GameLevel");
+				var size_value = o.options[o.selectedIndex].value;
+	    		console.log(size_value);
+	    		var RankObj = {};
+	    		RankObj.size = size_value;
+				var string = new String("{}");
+				var secondcall = false;
+
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/ranking", true);
+				xhr.onreadystatechange = function(){
+					if(xhr.readstate < 4) return;
+					if(xhr.status == 200){
+						var data = JSON.parse(xhr.responseText);
+						if(data == string){
+							alert("Ainda sem tabela classificativa");
+						}
+						else{
+							var cont = 1;
+							for(var i = 0 ; i < 10 ; i++){
+								//if(secondcall) break
+								console.log("i: " + i);
+								var text = document.createTextNode("#" + cont + " " + data.ranking[i].nick + " " + data.ranking[i].victories + " " + data.ranking[i].games);
+								score_node[i] = document.createElement("td");
+								score_node[i].setAttribute("id","td"+cont);
+								score_node[i].appendChild(text);
+								document.getElementById("tr"+cont).appendChild(score_node[i]);
+								cont++;
+							}
+							xhr.abort()
+							//secondcall = true;
 						}
 					}
+					/*else{
+						alert(xhr.status);
+					}*/
 				}
-				else{
-					alert(xhr.status);
-				}
-			}
-			xhr.send(rankObj);
-    	}
+				xhr.send(JSON.stringify(RankObj));
+	    //}
+	}
 }
 
 /*
@@ -479,6 +506,7 @@ function join_match(){
 						game_value = data.game;
 						//console.log("join done");
 						console.log("game_value: " + game_value);
+						xhr.abort()
 						updateee();
 				}
 				//else{
@@ -513,8 +541,10 @@ function login(){
 			var data = JSON.parse(xhr.responseText);
 			//alert(data);
 			if(!(data == string)){
-				console.log("Login Done"); // teste123 123
+				//console.log("Login Done"); // teste123 123  ou  mac mac
+				alert("Login Done");
 				online = true;
+				xhr.abort()
 			}
 		}
 		//else{
@@ -526,6 +556,7 @@ function login(){
 
 function updateee(){
 	//console.log(game_value);
+	updatee = 0;
 	var eventSource = new EventSource("http://twserver.alunos.dcc.fc.up.pt:8008/update?nick="+LoginObj.nick+"&game="+game_value);
 
 	eventSource.addEventListener('message',function(e){
@@ -536,6 +567,7 @@ function updateee(){
 		}*/
 		var data = JSON.parse(e.data);
 		console.log("update  turn " + data.turn);
+		console.log("updatee: " + updatee);
 		who_plays = data.turn;
 		if(updatee == 0){
 			console.log("online game started");
@@ -563,7 +595,6 @@ function updateee(){
 			if(win){
 				if(winning_online == false) alert("You LOST");
 				console.log("closing server");
-				updatee = 0;
 				gameINcourse = false;
 				eventSource.close();
 			}
@@ -596,8 +627,9 @@ function notify(column, order){
 		if(xhr.readystate < 4) return;
 		if(xhr.status == 200){
 			//var data = JSON.parse(xhr.responseText);
+			xhr.abort();
 		}
-		else console.log("notify status: " + xhr.status);
+		//else console.log("notify status: " + xhr.status);
 	}
 	xhr.send(JSON.stringify(NotifyObj));
 }

@@ -72,17 +72,16 @@
 			</form>
 		</div> <!-- CLOSE DIV SETTINGS -->
 
-		<div id = "buttons">
-			<button id="play_online" type="button" onclick="join_match()">Play Online</button>
-			<button id="desistir" type="button" onclick="leave()">Desistir</button>
-		</div>
-
 
 		<canvas id="game_started" width="300" height="200"></canvas>
 		<canvas id="searching_game" width="300" height="200"></canvas>
 
 		<!-- DIV GAME -->
 		<div id = "game_board">
+			<div id = "buttons">
+			<button id="play_online" type="button" onclick="join_match()">Play Online</button>
+			<button id="give_up" type="button" onclick="leave()">Give Up</button>
+		</div>
 		</div> <!-- CLOSE DIV GAME -->
 
 		<!-- DIV RULES -->
@@ -138,6 +137,16 @@
 	      			</tr>
 	    		</thead>
 	    		<tbody id="body_scores">
+	    			<tr id="tr1"></tr>
+	    			<tr id="tr2"></tr>
+	    			<tr id="tr3"></tr>
+	    			<tr id="tr4"></tr>
+	    			<tr id="tr5"></tr>
+	    			<tr id="tr6"></tr>
+	    			<tr id="tr7"></tr>
+	    			<tr id="tr8"></tr>
+	    			<tr id="tr9"></tr>
+	    			<tr id="tr10"></tr>
 	   			</tbody> 
 	 		</table>
 	  	</div> <!-- CLOSE DIV SCORE -->

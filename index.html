@@ -28,7 +28,7 @@
              	<a onclick="changeDivs('popupLogin')" href="#">Account</a>
            	</li>
             <li>
-              	<a onclick="changeDivs('game')" href="#">Play</a>
+              	<a onclick="changeDivs('game_board')" href="#">Play</a>
             </li>
         </ul>
 	</nav>
@@ -72,8 +72,17 @@
 			</form>
 		</div> <!-- CLOSE DIV SETTINGS -->
 
+		<div id = "buttons">
+			<button id="play_online" type="button" onclick="join_match()">Play Online</button>
+			<button id="desistir" type="button" onclick="leave()">Desistir</button>
+		</div>
+
+
+		<canvas id="game_started" width="300" height="200"></canvas>
+		<canvas id="searching_game" width="300" height="200"></canvas>
+
 		<!-- DIV GAME -->
-		<div id = "game">
+		<div id = "game_board">
 		</div> <!-- CLOSE DIV GAME -->
 
 		<!-- DIV RULES -->
@@ -101,37 +110,35 @@
 	  	<div id="score">
 	  		<h2>Scoreboard</h2>
 
-	  		<select id="Score_GameType">
-	    		<option value="online" selected>Offline</option>
-	   			<option value="offline">Online</option>
-	  		</select>
+	  		<div id="score_buttons">
+	  			<select id="Score_GameType">
+	    			<option id="offline" value="Offline" selected>Offline</option>
+	   				<option id="online" value="Online">Online</option>
+	  			</select>
 
-	  		<select id="Score_GameLevel">
-	    		<option value="easy" selected>Easy</option>
-	    		<option value="normal">Normal</option>
-	    		<option value="hardest">Hardest</option>
-	 		</select>
+	  			<select id="Score_GameLevel">
+	    			<option id="3" value="3" selected>3</option>
+	    			<option id="4" value="4">4</option>
+	    			<option id="5" value="5">5</option>
+	    			<option id="6" value="6">6</option>
+	    			<option id="7" value="7">7</option>
+	    			<option id="8" value="8">8</option>
+	 			</select>
 
-	 		<button>Filter</button>
-
-	 		<br />
+	 			<button onclick="ScoreBoard()">Filter</button>
+	 		</div>
 
 	 		<table class="scores">
 	    		<thead>
 	     		    <tr>
 						<td>#</td>
 						<td>Name</td>
-						<td>Points</td>
-						<td>Dificulty</td>
+						<td>Victories</td>
+						<td>Games</td>
 	      			</tr>
 	    		</thead>
-	    		<!-- <tbody>
-	    			<tr>
-	    				<td>1</td>
-	    				<td>localhost</td>
-	    				<td>3</td>
-	    				<td>easy</td>
-	   			</tbody> -->
+	    		<tbody id="body_scores">
+	   			</tbody> 
 	 		</table>
 	  	</div> <!-- CLOSE DIV SCORE -->
 

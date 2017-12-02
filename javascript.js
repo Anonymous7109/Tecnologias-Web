@@ -52,12 +52,19 @@ var array = Array(numOfColumns);
 var clicked = Array(numOfColumns); // clicked = [[,,,,],[,,,,],[,,,,]]
 //var game = document.getElementById("game");
 var gameISover;
-var score = Array(3);
+var score_player = Array(6);
+var score_cpu = Array(6);
 var score_flag = 0;
 
-for ( i = 0 ; i < 3 ; i++) score[i] = 0;
+for ( i = 3 ; i < 9 ; i++){
+    score_player[i] = 0;
+    score_cpu[i] = 0;
+}
 
 var score_node = Array(1);
+var webstorage = true;
+
+//-----------------------------------------------------------------------------------------------------
 
 function init_arrays(){
 	var i, j;
@@ -81,6 +88,18 @@ var Circle = function (pos_x, pos_y, column, order) {		   // Create object
 
 function startGame() {  
 	var i, j;
+
+		if(typeof(Storage) === "undefined"){
+			webstorage = false;
+		}
+		else{
+			var v = localStorage.getItem("player_"+numOfColumns);
+			var v2 = localStorage.getItem("cpu_"+numOfColumns);
+			if((v === null) && (v2 === null)){
+				localStorage.setItem("cpu_"+numOfColumns, 0);
+				localStorage.setItem("player_"+numOfColumns, 0);
+			}
+		}
 
 		gameISover = 0;
 		console.log("startGame");
@@ -137,9 +156,12 @@ function playerremove(){
 
 		if(winning_function()){ 
 			alert("Player You Won!");
-			if(dificulty == 0) score[0]++;
-			else if(dificulty == 1) score[1]++;
-			else score[2]++;
+			if(webstorage){
+				var v = localStorage.getItem("player_"+numOfColumns);
+				v++;
+				localStorage.setItem("player_"+numOfColumns, v);
+			}
+			else score_player[numOfColumns]++;
 			gameISover = 1;
 			closeAllDivs();
 			flag = false;
@@ -290,7 +312,8 @@ function pc_move(){
 	}
 
 	console.log("teste winning function");
-	setTimeout(function(){if(winning_function()){ alert("Player You Lost!"); console.log("player you lost"); gameISover = 1; closeAllDivs(); }}, 1200);
+	setTimeout(function(){if(winning_function()){ alert("Player You Lost!"); if(webstorage){ var v = localStorage.getItem("cpu_"+numOfColumns);
+				v++; localStorage.setItem("cpu_"+numOfColumns, v); } else score_cpu[numOfColumns]++; console.log("player you lost"); gameISover = 1; closeAllDivs(); }}, 1200);
 
 	setTimeout(function(){ player_remove = true; }, 1300);
 }
@@ -372,28 +395,51 @@ function isInArray(value, array) {
 
 function ScoreBoard(){
 	score_flag = 1;
+	var flag = 0;
 
 	if(document.getElementById('offline').selected){
 
 		for(var j = 1 ; j <= 10 ; j++){
-	 		console.log("delete");
+	 		//console.log("delete");
 	 		if(document.getElementById("td"+j) != null){
 				var element = document.getElementById("td"+j);
 				element.parentNode.removeChild(element);
 			}
 		}
 
+
+
 		var of = document.getElementById("Score_GameLevel");
 		var size_value = of.options[of.selectedIndex].value;
 
-		var text = document.createTextNode("localhost " + score[0] + " easy");
-		var text2 = document.createTextNode(" localhost " + score[1] + " normal");
-		var text3 = document.createTextNode(" localhost " + score[2] + " hardest");
-		score_node[0] = document.createElement("div");
+		if(webstorage){
+			var victories_player = localStorage.getItem("player_"+size_value);
+			if(victories_player === null){
+				var text = document.createTextNode("Ainda sem tabela classificativa");
+				flag = 1;
+			}
+			else{ 
+				var text = document.createTextNode("localhost " + victories_player);
+				var victories_cpu = localStorage.getItem("cpu_"+size_value);
+				var text2 = document.createTextNode("cpu " + victories_cpu);
+			}
+		}
+		else{
+			var text = document.createTextNode("localhost " + score_player[size_value]);
+			var text2 = document.createTextNode("CPU " + score_cpu[size_value]);
+		}
+
+		score_node[0] = document.createElement("td");
+		score_node[0].setAttribute("id","td1");
 		score_node[0].appendChild(text);
-		score_node[0].appendChild(text2);
-		score_node[0].appendChild(text3);
-		document.getElementById("body_scores").appendChild(score_node[0]);
+		document.getElementById("tr1").appendChild(score_node[0]);
+
+		if(flag == 0){
+			score_node[1] = document.createElement("td");
+			score_node[1].setAttribute("id","td2");
+			score_node[1].appendChild(text2);
+			document.getElementById("tr2").appendChild(score_node[1]);
+		}
     }
  	else{ 
 	 	for(var j = 1 ; j <= 10 ; j++){

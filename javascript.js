@@ -43,6 +43,9 @@ var LoginObj={};
 var JoinObj = {};
 var update = 0;
 var gameINcourse = false;
+var who_plays;
+var updatee = 0;
+var winning_online = false;
 
 var matrix = Array(numOfColumns);
 var array = Array(numOfColumns);
@@ -299,7 +302,7 @@ function winning_function(){
 		//console.log("circles[i].length " + circles[i].length);
  		if(circles[i].length != 0) flag = false;
     }
-    console.log("flag: " + flag);
+    console.log("winning: " + flag);
     return flag;
 }
 
@@ -474,7 +477,7 @@ function join_match(){
 				if(xhr.status == 200){
 						var data = JSON.parse(xhr.responseText);
 						game_value = data.game;
-						console.log("join done");
+						//console.log("join done");
 						console.log("game_value: " + game_value);
 						updateee();
 				}
@@ -487,7 +490,6 @@ function join_match(){
 		else alert("you need to be online first");
 	}
 	else alert("you are already in a game");
-
 }
 
 function login(){
@@ -527,11 +529,46 @@ function updateee(){
 	var eventSource = new EventSource("http://twserver.alunos.dcc.fc.up.pt:8008/update?nick="+LoginObj.nick+"&game="+game_value);
 
 	eventSource.addEventListener('message',function(e){
+		/*if(winning_online){
+			console.log("closing server");
+			gameINcourse = false;
+			eventSource.close();
+		}*/
 		var data = JSON.parse(e.data);
-		console.log("online game started");
-		console.log("turn " + data.turn);
-		gameINcourse = true;
-		startGame_online(data.turn);
+		console.log("update  turn " + data.turn);
+		who_plays = data.turn;
+		if(updatee == 0){
+			console.log("online game started");
+			gameINcourse = true;
+			startGame_online();
+		}
+		else{
+			if(LoginObj.nick == data.turn || (typeof(who_plays) == 'undefined')){
+				// remove the circles to the circle that the other player clicked
+				for(var j=circles[data.stack].length-1 ; j >= data.pieces ; j--){
+					circles[data.stack][j].element.parentNode.
+					removeChild(circles[data.stack][j].element);
+					circles[data.stack].pop();
+				}
+			}
+
+			var win = false;
+			for(var i = 0; i < numOfColumns ; i++){
+				if(data.rack[i] == 0) win = true;
+				else{
+					win = false;
+					break;
+				}
+			}
+			if(win){
+				if(winning_online == false) alert("You LOST");
+				console.log("closing server");
+				updatee = 0;
+				gameINcourse = false;
+				eventSource.close();
+			}
+		}
+		updatee = 1;
 	}, false);
 			/* CANVAS
 			var tela = document.getElementById('game_started');
@@ -544,15 +581,13 @@ function updateee(){
 			*/
 }
 
-/*
 function notify(column, order){
 	var NotifyObj = {}
-	var string = new String("{}");
 
 	NotifyObj.nick = LoginObj.nick;
 	NotifyObj.pass = LoginObj.pass;
 	NotifyObj.game = game_value;
-	NotifyObjstack = column;
+	NotifyObj.stack = column;
 	NotifyObj.pieces = order;
 
 	var xhr = new XMLHttpRequest();
@@ -560,34 +595,35 @@ function notify(column, order){
 	xhr.onreadystatechange = function(){
 		if(xhr.readystate < 4) return;
 		if(xhr.status == 200){
-			var data = JSON.parse(xhr.responseText);
-			console.log("notify response: " + data);
-			if(data == string) return true;
-			else return false; 
+			//var data = JSON.parse(xhr.responseText);
 		}
 		else console.log("notify status: " + xhr.status);
 	}
-	xhr.send(NotifyObj);
+	xhr.send(JSON.stringify(NotifyObj));
 }
 
-
-*/
-
-
-
-function playerremove_online(who_starts_playing){
-	if(who_starts_playing == LoginObj.nick){
+function playerremove_online(){
+	//console.log("who_starts_playing: " + who_starts_playing);
+	//console.log("LoginObj.nick : " + LoginObj.nick);
+	if(who_plays == LoginObj.nick){
+		var notify_flag = true;
 		// Canvas your turn
 
-		//if(notify(this.column, this.order)){
-			for(var j=circles[this.column].length-1 ; j >= this.order ; j--){
-				circles[this.column][j].element.parentNode.
-				removeChild(circles[this.column][j].element);
-				circles[this.column].pop();
+		// remove the circles to the circle that the player clicked
+		for(var j=circles[this.column].length-1 ; j >= this.order ; j--){
+			//console.log("column: " + this.column);
+			circles[this.column][j].element.parentNode.
+			removeChild(circles[this.column][j].element);
+			circles[this.column].pop();
+			if(notify_flag){
+				notify(this.column, this.order);
+				notify_flag = false;
 			}
-		//}
+		}
 
 		if(winning_function()){
+			winning_online = true;
+			alert("You WON!");
 			// LoginObj.nick won
 			// score update
 		}
@@ -595,15 +631,13 @@ function playerremove_online(who_starts_playing){
 	else alert("Not your turn to play");
 }
 
-function startGame_online(who_starts_playing){
+function startGame_online(){
 	var i, j;
 
 	init_arrays();
 
 	circles = Array(JoinObj.size);
-        for (j=0; j<JoinObj.size; j++)
-            circles[j] = Array(j); 
-
+    for (j=0; j<JoinObj.size; j++) circles[j] = Array(j); 
 
     console.log("populate");
 
@@ -621,6 +655,4 @@ function startGame_online(who_starts_playing){
     }
 
     changeDivs("game_board");
-
-    playerremove_online(who_starts_playing);
 }

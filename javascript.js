@@ -46,6 +46,7 @@ var gameINcourse = false;
 var who_plays;
 var updatee = 0;
 var winning_online = false;
+var giveup = false;
 
 var matrix = Array(numOfColumns);
 var array = Array(numOfColumns);
@@ -492,49 +493,65 @@ function ScoreBoard(){
 	}
 }
 
-/*
 function leave(){
 	if(online){
-		LeaveObj = { "nick": "" + LoginObj.nick + "", "pass": "" + LoginObj.pass + "", "game": "" + game_value + "" }
-		var string = new String("{}");
+		var LeaveObj = {}
+
+		LeaveObj.nick = LoginObj.nick;
+		LeaveObj.pass = LoginObj.pass;
+		LeaveObj.game = game_value;
 
 		var xhr = new XMLHttpRequest();
 		xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/leave", true);
 		xhr.onreadystatechange = function(){
-			console.log("readysstate-leave");
+			console.log("readystate leave")
 			if(xhr.readstate < 4) return;
 			if(xhr.status == 200){
 				var data = JSON.parse(xhr.responseText);
-				if(!(data == string)){
 					// canvas leaving
-					alert(data);
-					eventSource.close();
-					closeAllDivs();
-				}
-			}
-			else{
-				alert(xhr.status);
+					xhr.abort();
 			}
 		}
-		xhr.send(LoginObj);
+		xhr.send(JSON.stringify(LeaveObj));
 	}
-	else{} // OFFLINE GAME
+	else{ // OFFLINE GAME
+		alert("You lost");
+		if(webstorage){ 
+		 	var v = localStorage.getItem("cpu_"+numOfColumns);
+			v++; 
+			localStorage.setItem("cpu_"+numOfColumns, v); 
+		} 
+		else score_cpu[numOfColumns]++; 
+		//caso o user deixe algum jogo offline em aberto
+		for(var i=0 ; i < numOfColumns ; i++){
+			for (var j = 0 ; j < i+1 ; j++) {
+				if(!(circles[i][j] == null)){  
+					circles[i][j].element.parentNode.        
+					removeChild(circles[i][j].element); 	
+					circles[j].pop();
+				}	 						
+			}	
+		}
+		gameISover = 1;
+		closeAllDivs();
+	}
 }
-*/
+
 function join_match(){
 	var flag = true;
 	if(!gameINcourse){
 		if(online){
 
-
-			//caso o user deixe algum jogo offline em aberto
-			for(var i=0 ; i < numOfColumns ; i++){
-				for (var j = 0 ; j < i+1 ; j++) {
-					if(!(circles[i][j] == null)){  
-						circles[i][j].element.parentNode.        
-						removeChild(circles[i][j].element); 	
-						circles[j].pop();
-					} 						
+			if(!giveup){
+				//caso o user deixe algum jogo offline em aberto
+				for(var i=0 ; i < numOfColumns ; i++){
+					for (var j = 0 ; j < i+1 ; j++) {
+						if(!(circles[i][j] == null)){  
+							circles[i][j].element.parentNode.        
+							removeChild(circles[i][j].element); 	
+							circles[j].pop();
+						}	 						
+					}
 				}
 			}
 
@@ -613,7 +630,7 @@ function updateee(){
 		}*/
 		var data = JSON.parse(e.data);
 		console.log("update  turn " + data.turn);
-		console.log("updatee: " + updatee);
+		//console.log("updatee: " + updatee);
 		who_plays = data.turn;
 		if(updatee == 0){
 			console.log("online game started");
@@ -621,28 +638,48 @@ function updateee(){
 			startGame_online();
 		}
 		else{
-			if(LoginObj.nick == data.turn || (typeof(who_plays) == 'undefined')){
-				// remove the circles to the circle that the other player clicked
-				for(var j=circles[data.stack].length-1 ; j >= data.pieces ; j--){
-					circles[data.stack][j].element.parentNode.
-					removeChild(circles[data.stack][j].element);
-					circles[data.stack].pop();
-				}
-			}
-
-			var win = false;
-			for(var i = 0; i < numOfColumns ; i++){
-				if(data.rack[i] == 0) win = true;
-				else{
-					win = false;
-					break;
-				}
-			}
-			if(win){
-				if(winning_online == false) alert("You LOST");
-				console.log("closing server");
+			if(data.winner != null && data.rack == null){
+				alert("Player Give Up");
 				gameINcourse = false;
+				giveup = true;
+				console.log("closing server because of give up");
 				eventSource.close();
+				// apagar os circles que faltam
+				for(var i=0 ; i < numOfColumns ; i++){
+					for (var j = 0 ; j < i+1 ; j++) {
+						if(!(circles[i][j] == null)){  
+							circles[i][j].element.parentNode.        
+							removeChild(circles[i][j].element); 	
+							circles[j].pop();
+						} 						
+					}
+				}
+				closeAllDivs();
+			}
+			else{
+				if(LoginObj.nick == data.turn || (typeof(who_plays) == 'undefined')){
+					// remove the circles to the circle that the other player clicked
+					for(var j=circles[data.stack].length-1 ; j >= data.pieces ; j--){
+						circles[data.stack][j].element.parentNode.
+						removeChild(circles[data.stack][j].element);
+						circles[data.stack].pop();
+					}
+				}
+
+				var win = false;
+				for(var i = 0; i < numOfColumns ; i++){
+					if(data.rack[i] == 0) win = true;
+					else{
+						win = false;
+						break;
+					}
+				}
+				if(win){
+					if(winning_online == false) alert("You LOST");
+					console.log("closing server");
+					gameINcourse = false;
+					eventSource.close();
+				}	
 			}
 		}
 		updatee = 1;

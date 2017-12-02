@@ -314,7 +314,7 @@ table.scores thead tr { font-weight: bold; }
 table.scores thead tr td { width: 1%; }
 
 
-button#play_online{
+button#play_online {
     text-decoration:none;
     width:10%;
     text-align:center;
@@ -327,7 +327,7 @@ button#play_online{
     border-radius:5px; 
 }
 
-button#give_up{
+button#give_up {
     text-decoration:none;
     width:10%;
     text-align:center;
@@ -338,4 +338,22 @@ button#give_up{
     font-size:20px;
     cursor:pointer;
     border-radius:5px; 
+}
+
+canvas#searching_game {
+    width: 300px;
+    height: 300px;
+    visibility: hidden;
+    position: absolute; /* to overlap */
+    top: 15%;
+    left: 22%;
+}
+
+canvas#game_started {
+    width: 700px;
+    height: 300px;
+    visibility: hidden;
+    position: absolute; /* to overlap */
+    top: 15%;
+    left: 15%;
 }

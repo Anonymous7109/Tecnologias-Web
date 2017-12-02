@@ -570,6 +570,7 @@ function join_match(){
 						//console.log("join done");
 						console.log("game_value: " + game_value);
 						xhr.abort()
+						show_canvas_loading();
 						updateee();
 				}
 				//else{
@@ -590,31 +591,34 @@ function login(){
 
 	console.log(nick);
 	console.log(pass);
+	if(nick != "" && pass != ""){
 
-	//LoginObj = {"nick": "" + nick + "" , "pass": "" + pass + ""}
-	LoginObj.nick = nick;
-	LoginObj.pass = pass;
+		//LoginObj = {"nick": "" + nick + "" , "pass": "" + pass + ""}
+		LoginObj.nick = nick;
+		LoginObj.pass = pass;
 
 
-	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/register", true);
-	xhr.onreadystatechange = function(){
-		if(xhr.readystate < 4) return;
-		if(xhr.status == 200){
-			var data = JSON.parse(xhr.responseText);
-			//alert(data);
-			if(!(data == string)){
-				//console.log("Login Done"); // teste123 123  ou  mac mac
-				alert("Login Done");
-				online = true;
-				xhr.abort()
+		var xhr = new XMLHttpRequest();
+		xhr.open("POST", "http://twserver.alunos.dcc.fc.up.pt:8008/register", true);
+		xhr.onreadystatechange = function(){
+			if(xhr.readystate < 4) return;
+			if(xhr.status == 200){
+				var data = JSON.parse(xhr.responseText);
+				//alert(data);
+				if(!(data == string)){
+					//console.log("Login Done"); // teste123 123  ou  mac mac
+					alert("Login Done");
+					online = true;
+					xhr.abort()
+				}
+			}
+			else{
+				//alert("Wrong Password");
+			//	alert(xhr.status);
 			}
 		}
-		//else{
-		//	alert(xhr.status);
-		//}
+		xhr.send(JSON.stringify(LoginObj));
 	}
-	xhr.send(JSON.stringify(LoginObj));
 }
 
 function updateee(){
@@ -629,15 +633,22 @@ function updateee(){
 			eventSource.close();
 		}*/
 		var data = JSON.parse(e.data);
-		console.log("update  turn " + data.turn);
+		//console.log("update  turn " + data.turn);
 		//console.log("updatee: " + updatee);
 		who_plays = data.turn;
 		if(updatee == 0){
 			console.log("online game started");
 			gameINcourse = true;
-			startGame_online();
+			hide_canvas_loading();
+			show_canvas_startgame();
+			setTimeout(function() { hide_canvas_startgame() } , 5500);
+			setTimeout(function() { startGame_online() } , 6000);
+			setTimeout(function(){ if(!(data.turn === "undefined")) alert("turn: " + data.turn) } , 6500);
+			//if(!(data.turn === "undefined")) alert("turn: " + data.turn);
+			//startGame_online();
 		}
 		else{
+			if(!(data.turn === "undefined")) alert("turn: " + data.turn);
 			if(data.winner != null && data.rack == null){
 				alert("Player Give Up");
 				gameINcourse = false;
@@ -659,6 +670,7 @@ function updateee(){
 			else{
 				if(LoginObj.nick == data.turn || (typeof(who_plays) == 'undefined')){
 					// remove the circles to the circle that the other player clicked
+					alert("Opponent played on column: " + data.stack + " and selected the piece: " + data.pieces);
 					for(var j=circles[data.stack].length-1 ; j >= data.pieces ; j--){
 						circles[data.stack][j].element.parentNode.
 						removeChild(circles[data.stack][j].element);
@@ -684,15 +696,6 @@ function updateee(){
 		}
 		updatee = 1;
 	}, false);
-			/* CANVAS
-			var tela = document.getElementById('game_started');
-			var gc = tela.getContext("2d");
-
-			gc.fillStyle = "purple";
-			gc.font = '32px serif';
-			gc.fillText("GAME IS ABOUT TO START!", 100,100);
-
-			*/
 }
 
 function notify(column, order){
@@ -770,4 +773,65 @@ function startGame_online(){
     }
 
     changeDivs("game_board");
+}
+
+
+// CANVAS 
+
+function show_canvas_startgame(){
+		document.getElementById("game_started").style.visibility = "visible";
+		console.log("show canvas");
+		var tela = document.getElementById('game_started');
+		var gc = tela.getContext("2d");
+
+		gc.fillStyle = "purple";
+		gc.font = '12px serif';
+		gc.fillText("GAME IS ABOUT TO START!", 100,100);
+}
+
+function hide_canvas_startgame(){
+	document.getElementById("game_started").style.visibility = "hidden";
+}
+
+function show_canvas_loading(){
+
+	console.log("show canvas loading");
+
+	(function(){
+  		var base = document.getElementById('searching_game'),
+    	gc = base.getContext('2d'),
+    	pi = Math.PI,
+    	xCenter = base.width/2,
+    	yCenter = base.height/2,
+    	radius = base.width/3,
+    	startSize = radius/3,
+    	num=5,
+    	posX=[],posY=[],angle,size,i;
+
+  		window.setInterval(function() {
+    		num++;
+   			gc.clearRect ( 0 , 0 , xCenter*2 , yCenter*2 );
+   			for (i=0; i<9; i++){
+      		gc.beginPath();
+      		gc.fillStyle = 'rgba(69,99,255,'+.1*i+')';
+      		if (posX.length==i){
+        		angle = pi*i*.25;
+        		posX[i] = xCenter + radius * Math.cos(angle);
+        		posY[i] = yCenter + radius * Math.sin(angle);
+      		}
+      		gc.arc(
+        		posX[(i+num)%8],
+        		posY[(i+num)%8],
+        		startSize/9*i,
+        		0, pi*2, 1); 
+      		gc.fill();
+    		}
+  		}, 100);
+  	})();
+
+	document.getElementById("searching_game").style.visibility = "visible";
+}
+
+function hide_canvas_loading(){
+	document.getElementById("searching_game").style.visibility = "hidden";
 }

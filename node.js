@@ -11,41 +11,63 @@ module.exports.port = 8049;
 module.exports.mediaTypes = { "txt": "text/plain", "html": "text/html", "css": "text/css", "js": "application/javascript", "png": "image/png", "jpeg": "image/jpeg", "jpg": "image/jpeg", }
 
 var server = http.createServer(function (request, response){
+	// CORS
+	response.setHeader('Access-Control-Allow-Origin', '*');
+	response.setHeader('Access-Control-Request-Method', '*');
+	response.setHeader('Access-Control-Allow-Methods', 'OPTIONS, GET, PUT');
+	response.setHeader('Access-Control-Allow-Headers', '*');
+
+	var flag = false;
 	console.log("server runing\n");
 	var relativeUrl = url.parse(request.url, true);
 	var pathname = relativeUrl.pathname;
-	var body = ""; 
-	switch(request.method) { 
-		case "POST": request 
-			.on("data", (chunk) => { body += chunk; }) 
-			.on("end", () => { try { query = JSON.parse(body); /* processar query */ } catch(err) { /* erros de JSON */ } }) 
-			.on("error", (err) => { console.log(err.message); }); 
-			break; 
-	}
+	var query = relativeUrl.query;
+
+	response.writeHead(200, {'Content-Type': 'text/plain'});
 
 	switch(pathname){
-		case "/register": register(body, response); break;
+		case "/register": 
+			if(request.method == "POST"){
+				var body = "";
+				request.on("data", function(data){ console.log("data: "+data); body += data; }); 
+				request.on("end", function () { 
+				try { query = JSON.parse(body); register(query, response, request) /* processar query */ } 
+				catch(err) { /* erros de JSON */ } 
+				}) 
+				request.on("error", (err) => { console.log(err.message); }); 
+			}
+			break;
+		default:
+			response.writeHead(400);
+			break;
 	}
-	//response.writeHead(200, {'Content-Type': 'text/plain'});
+	console.log("2");
+	//response.end();
 	//response.write(JSON.stringify({}));
+	if(flag == true) response.end();
 });
 
 server.listen(8049);
 
-function register(body, response){
-	//var jason_object = JSON.parse(body);
-	//response.write(jason_object.nick);
-	//response.write(jason_object.pass);
-	var nick = "mac";
-	response.write("register\n");
+//function GetRequest(request, response){}
+
+function register(query, response, request){
+	console.log("query:\n");
+	console.log(query);
 	fs.readFile("dados.json",function(err, data){
-		if(!err){ // processar data como string
+		if(!err){ 
 			var obj = JSON.parse(content);
 			for(var i in obj){
-			console.log(obj[i].name);
-			if(obj[i].name == nick){ console.log("pass: " + obj[i].pass); break; } 
+				if(query.nick == obj[i].name){
+					if(query.pass == obj[i].pass) response.write('{}');
+					else response.write('{ "error": "User registered with a different password"}');
+				}
+				else{
+					var obj2 = {"nick": "" + query.nick + "" , "pass": "" + query.pass + ""};
+					fs.writeFile("dados.json", JSON.stringify(obj2), (err) => {if(err) throw err; });
+				}
 			}
 		}
-		response.end("end\n");
 	});
+	console.log("1");
 }
